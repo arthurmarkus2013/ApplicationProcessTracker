@@ -1,0 +1,5 @@
+[requires]
+libharu/2.4.3
+
+[generators]
+cmake
