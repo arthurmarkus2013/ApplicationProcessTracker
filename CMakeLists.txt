@@ -38,7 +38,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     )
 endif()
 
-qt_add_translations(ApplicationProcessTracker TS_FILES ${TS_FILES} RESOURCE_PREFIX "/translations")
+qt_add_translations(ApplicationProcessTracker TS_FILES ${TS_FILES})
 
 target_link_libraries(ApplicationProcessTracker PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Sql ${CONAN_LIBS})
 
