@@ -47,6 +47,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="businesslogic.cpp" line="136"/>
+        <source>Fatal Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="businesslogic.cpp" line="136"/>
+        <source>ERROR: Cant&apos; create PDF object</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="businesslogic.cpp" line="149"/>
         <source>My Applications</source>
         <translation type="unfinished"></translation>

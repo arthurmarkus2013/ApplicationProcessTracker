@@ -133,7 +133,7 @@ bool BusinessLogic::exportAsPDF(QString path, QWidget *parent)
     HPDF_Doc pdf = HPDF_New(pdf_error_handler, parent);
 
     if (!pdf) {
-        printf ("ERROR: cannot create pdf object.\n");
+        QMessageBox::critical(parent, tr("Fatal Error"), tr("ERROR: Cant' create PDF object"));
         return false;
     }
 
