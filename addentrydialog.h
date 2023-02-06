@@ -4,7 +4,7 @@
 #include "qdatetime.h"
 #include <QDialog>
 
-#include "Entry.h"
+#include "EntryHelper.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class AddEntryDialog; }
@@ -18,8 +18,8 @@ public:
     AddEntryDialog(QWidget *parent = nullptr);
     ~AddEntryDialog();
     bool showDialog(QString title);
-    Entry getEntry();
-    void setEntry(Entry entry);
+    EntryHelper::Entry getEntry();
+    void setEntry(EntryHelper::Entry entry);
 
 private slots:
     void on_buttonBox_accepted();
@@ -28,7 +28,7 @@ private slots:
 
 private:
     Ui::AddEntryDialog *ui;
-    Entry entry;
+    EntryHelper::Entry entry;
 };
 
 #endif // ADDENTRYDIALOG_H

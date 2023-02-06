@@ -15,6 +15,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    QTranslator translator;
+
     QString dbPath = a.applicationDirPath() + QDir::separator() + "store.db";
         QFile file(dbPath);
         if(!file.exists())
@@ -28,7 +30,7 @@ int main(int argc, char *argv[])
 
         if(!db.open())
         {
-            QMessageBox::critical(nullptr, "Fatal Error", "Failed to open the database file");
+            QMessageBox::critical(nullptr, translator.tr("Fatal Error"), translator.tr("Failed to open the database file"));
             a.exit(1);
         }
 
@@ -39,7 +41,6 @@ int main(int argc, char *argv[])
                 "latest_status INTEGER NOT NULL, "
                 "updated_on INTEGER NOT NULL)");
 
-    QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
     for (const QString &locale : uiLanguages) {
         const QString baseName = "ApplicationProcessTracker_" + QLocale(locale).name();
@@ -48,6 +49,11 @@ int main(int argc, char *argv[])
             break;
         }
     }
+
+    // if (translator.load(":/i18n/ApplicationProcessTracker_" + QLocale("ru_RU").name())) {
+    //     a.installTranslator(&translator);
+    // }
+
     MainWindow w;
     w.show();
     return a.exec();

@@ -17,18 +17,18 @@ int BusinessLogic::getItemCount()
     return qvariant_cast<int>(query.value(0));
 }
 
-QList<Entry> BusinessLogic::getItems()
+QList<EntryHelper::Entry> BusinessLogic::getItems()
 {
-    QList<Entry> retVal;
+    QList<EntryHelper::Entry> retVal;
     QSqlQuery query;
     query.exec("SELECT company_name, applied_on, latest_status, updated_on FROM Applications");
 
     while(query.next())
     {
-        Entry item;
+        EntryHelper::Entry item;
         item.company_name = query.value(0).toString();
         item.applied_on = QDate::fromJulianDay(query.value(1).toLongLong());
-        item.status = static_cast<LatestStatus>(query.value(2).toInt());
+        item.status = static_cast<EntryHelper::LatestStatus>(query.value(2).toInt());
         item.updated_on = QDate::fromJulianDay(query.value(3).toLongLong());
         retVal.append(item);
     }
@@ -36,7 +36,7 @@ QList<Entry> BusinessLogic::getItems()
     return retVal;
 }
 
-bool BusinessLogic::addItem(Entry item)
+bool BusinessLogic::addItem(EntryHelper::Entry item)
 {
     bool result = false;
 
@@ -54,7 +54,7 @@ bool BusinessLogic::addItem(Entry item)
     return result;
 }
 
-bool BusinessLogic::updateItem(Entry oldItem, Entry newItem)
+bool BusinessLogic::updateItem(EntryHelper::Entry oldItem, EntryHelper::Entry newItem)
 {
     bool result = false;
 
@@ -80,7 +80,7 @@ bool BusinessLogic::updateItem(Entry oldItem, Entry newItem)
     return result;
 }
 
-bool BusinessLogic::removeItem(Entry item)
+bool BusinessLogic::removeItem(EntryHelper::Entry item)
 {
     bool result = false;
 
@@ -117,9 +117,9 @@ QStringList BusinessLogic::prepareDataForExport()
     {
         auto entry = item.company_name + " : " + tr("Applied On") + " " + item.applied_on.toString();
 
-        if(item.status != LatestStatus::Applied)
+        if(item.status != EntryHelper::LatestStatus::Applied)
         {
-            entry += " - " + convertLatestStatusToString(item.status) + " " + tr("On") + " " + item.updated_on.toString();
+            entry += " - " + EntryHelper().convertLatestStatusToString(item.status) + " " + tr("On") + " " + item.updated_on.toString();
         }
 
         retVal.append(entry);
@@ -133,7 +133,7 @@ bool BusinessLogic::exportAsPDF(QString path, QWidget *parent)
     HPDF_Doc pdf = HPDF_New(pdf_error_handler, parent);
 
     if (!pdf) {
-        QMessageBox::critical(parent, tr("Fatal Error"), tr("ERROR: Cant' create PDF object"));
+        QMessageBox::critical(parent, tr("Fatal Error"), tr("ERROR: Can't create PDF object"));
         return false;
     }
 

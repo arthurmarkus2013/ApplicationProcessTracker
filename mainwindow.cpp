@@ -34,7 +34,7 @@ void MainWindow::populateTable()
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         ui->applicationsTable->setItem(i, 1, item);
 
-        item = new QTableWidgetItem(convertLatestStatusToString(items[i].status));
+        item = new QTableWidgetItem(EntryHelper().convertLatestStatusToString(items[i].status));
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         ui->applicationsTable->setItem(i, 2, item);
 
@@ -108,10 +108,10 @@ void MainWindow::on_applicationsTable_customContextMenuRequested(const QPoint &p
     connect(ctxMenu.addAction(tr("Edit")), &QAction::triggered, this, [&](bool){
         auto items = ui->applicationsTable->selectedItems();
 
-        Entry entry;
+        EntryHelper::Entry entry;
         entry.company_name = items.value(0)->text();
         entry.applied_on = QDate::fromString(items.value(1)->text());
-        entry.status = parseLatestStatusFromString(items.value(2)->text());
+        entry.status = EntryHelper().parseLatestStatusFromString(items.value(2)->text());
         entry.updated_on = QDate::fromString(items.value(3)->text());
 
         AddEntryDialog dialog(this);
@@ -126,14 +126,14 @@ void MainWindow::on_applicationsTable_customContextMenuRequested(const QPoint &p
     });
 
     connect(ctxMenu.addAction(tr("Delete")), &QAction::triggered, this, [&](bool){
-        if(QMessageBox::question(this, tr("Delete Row"), tr("Do you really wanna delete this row?")) == QMessageBox::StandardButton::Yes)
+        if(QMessageBox::question(this, tr("Delete Entry"), tr("Do you really wanna delete this entry?")) == QMessageBox::StandardButton::Yes)
         {
             auto items = ui->applicationsTable->selectedItems();
-            Entry entry;
+            EntryHelper::Entry entry;
 
             entry.company_name = items[0]->text();
             entry.applied_on = QDate::fromString(items[1]->text());
-            entry.status = parseLatestStatusFromString(items[2]->text());
+            entry.status = EntryHelper().parseLatestStatusFromString(items[2]->text());
             entry.updated_on = QDate::fromString(items[3]->text());
 
             if(logic.removeItem(entry))

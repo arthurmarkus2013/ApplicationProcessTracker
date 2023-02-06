@@ -15,10 +15,11 @@ conan_basic_setup()
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools Sql)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Sql)
 
-set(TS_FILES ApplicationProcessTracker_en_US.ts)
+set(TS_FILES ApplicationProcessTracker_de_DE.ts ApplicationProcessTracker_ru_RU.ts)
 
 set(PROJECT_SOURCES
-        Entry.h
+        EntryHelper.h
+        EntryHelper.cpp
         businesslogic.h
         businesslogic.cpp
         addentrydialog.h

@@ -4,8 +4,14 @@
 AddEntryDialog::AddEntryDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AddEntryDialog)
 {
     ui->setupUi(this);
-    ui->latestStatus->addItems(statusText);
+    ui->latestStatus->addItems(EntryHelper().statusText);
     ui->appliedOnDate->setDate(QDate::currentDate());
+    int width = this->width();
+    int height = this->height();
+    this->setMinimumWidth(width);
+    this->setMaximumWidth(width);
+    this->setMinimumHeight(height);
+    this->setMaximumHeight(height);
 }
 
 AddEntryDialog::~AddEntryDialog()
@@ -19,12 +25,12 @@ bool AddEntryDialog::showDialog(QString title)
     return this->exec() == QDialog::Accepted;
 }
 
-Entry AddEntryDialog::getEntry()
+EntryHelper::Entry AddEntryDialog::getEntry()
 {
     return entry;
 }
 
-void AddEntryDialog::setEntry(Entry entry)
+void AddEntryDialog::setEntry(EntryHelper::Entry entry)
 {
     ui->companyName->setText(entry.company_name);
     ui->appliedOnDate->setDate(entry.applied_on);
@@ -37,7 +43,7 @@ void AddEntryDialog::on_buttonBox_accepted()
 {
     entry.company_name = ui->companyName->text();
     entry.applied_on = ui->appliedOnDate->date();
-    entry.status = static_cast<LatestStatus>(ui->latestStatus->currentIndex());
+    entry.status = static_cast<EntryHelper::LatestStatus>(ui->latestStatus->currentIndex());
     entry.updated_on = QDate::currentDate();
 
     this->accept();

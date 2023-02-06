@@ -11,7 +11,7 @@
 #include <QDate>
 #include <QMessageBox>
 
-#include "Entry.h"
+#include "EntryHelper.h"
 
 class BusinessLogic : QObject
 {
@@ -20,10 +20,10 @@ class BusinessLogic : QObject
 public:
     BusinessLogic(QObject *parent = nullptr);
     int getItemCount();
-    QList<Entry> getItems();
-    bool addItem(Entry item);
-    bool updateItem(Entry oldItem, Entry newItem);
-    bool removeItem(Entry item);
+    QList<EntryHelper::Entry> getItems();
+    bool addItem(EntryHelper::Entry item);
+    bool updateItem(EntryHelper::Entry oldItem, EntryHelper::Entry newItem);
+    bool removeItem(EntryHelper::Entry item);
     bool exportAsPDF(QString path, QWidget *parent = nullptr);
 
 private:
