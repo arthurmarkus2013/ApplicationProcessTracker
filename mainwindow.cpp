@@ -105,8 +105,7 @@ void MainWindow::on_applicationsTable_customContextMenuRequested(const QPoint &p
 {
     QMenu ctxMenu(this);
 
-    auto edit = std::make_unique<QAction>(ctxMenu.addAction(tr("Edit")));
-    connect(edit.get(), &QAction::triggered, this, [&](bool){
+    connect(ctxMenu.addAction(tr("Edit")), &QAction::triggered, this, [&](bool){
         auto items = ui->applicationsTable->selectedItems();
 
         Entry entry;
@@ -126,8 +125,7 @@ void MainWindow::on_applicationsTable_customContextMenuRequested(const QPoint &p
             }
     });
 
-    auto del = std::make_unique<QAction>(ctxMenu.addAction(tr("Delete")));
-    connect(del.get(), &QAction::triggered, this, [&](bool){
+    connect(ctxMenu.addAction(tr("Delete")), &QAction::triggered, this, [&](bool){
         if(QMessageBox::question(this, tr("Delete Row"), tr("Do you really wanna delete this row?")) == QMessageBox::StandardButton::Yes)
         {
             auto items = ui->applicationsTable->selectedItems();

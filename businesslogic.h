@@ -18,7 +18,7 @@ class BusinessLogic : QObject
     Q_OBJECT
 
 public:
-    BusinessLogic();
+    BusinessLogic(QObject *parent = nullptr);
     int getItemCount();
     QList<Entry> getItems();
     bool addItem(Entry item);

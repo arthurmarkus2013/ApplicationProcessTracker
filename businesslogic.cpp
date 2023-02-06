@@ -2,7 +2,7 @@
 
 #include "hpdf.h"
 
-BusinessLogic::BusinessLogic()
+BusinessLogic::BusinessLogic(QObject *parent) : QObject(parent)
 {
 
 }
@@ -99,10 +99,11 @@ bool BusinessLogic::removeItem(Entry item)
     return result;
 }
 
-void pdf_error_handler (HPDF_STATUS error_no, HPDF_STATUS detail_no, void *user_data)
+void pdf_error_handler(HPDF_STATUS error_no, HPDF_STATUS detail_no, void *user_data)
 {
-    auto msg = "ERROR: error_no = " + QString::number((unsigned int) error_no) + " detail_no = " + QString::number((int) detail_no);
-    QMessageBox::critical(static_cast<QWidget*>(user_data), "Failed To Export PDF", msg);
+    auto msg = BusinessLogic::tr("ERROR") + ": error_no = " + QString::number((unsigned int) error_no)
+            + " detail_no = " + QString::number((int) detail_no);
+    QMessageBox::critical(static_cast<QWidget*>(user_data), BusinessLogic::tr("Failed To Export PDF"), msg);
     throw std::exception(); /* throw exception on error */
 }
 

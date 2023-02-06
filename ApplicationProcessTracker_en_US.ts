@@ -27,17 +27,27 @@
 <context>
     <name>BusinessLogic</name>
     <message>
-        <location filename="businesslogic.cpp" line="116"/>
+        <location filename="businesslogic.cpp" line="104"/>
+        <source>ERROR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="businesslogic.cpp" line="106"/>
+        <source>Failed To Export PDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="businesslogic.cpp" line="118"/>
         <source>Applied On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="businesslogic.cpp" line="120"/>
+        <location filename="businesslogic.cpp" line="122"/>
         <source>On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="businesslogic.cpp" line="147"/>
+        <location filename="businesslogic.cpp" line="149"/>
         <source>My Applications</source>
         <translation type="unfinished"></translation>
     </message>
@@ -105,22 +115,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="121"/>
+        <location filename="mainwindow.cpp" line="120"/>
         <source>Edit Entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="129"/>
+        <location filename="mainwindow.cpp" line="128"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="131"/>
+        <location filename="mainwindow.cpp" line="129"/>
         <source>Delete Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="131"/>
+        <location filename="mainwindow.cpp" line="129"/>
         <source>Do you really wanna delete this row?</source>
         <translation type="unfinished"></translation>
     </message>
