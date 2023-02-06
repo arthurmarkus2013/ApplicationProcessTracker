@@ -9,6 +9,7 @@
 #include <QSqlError>
 #include <QStringList>
 #include <QDate>
+#include <QMessageBox>
 
 #include "Entry.h"
 
@@ -23,7 +24,7 @@ public:
     bool addItem(Entry item);
     bool updateItem(Entry oldItem, Entry newItem);
     bool removeItem(Entry item);
-    bool exportAsPDF(QString path);
+    bool exportAsPDF(QString path, QWidget *parent = nullptr);
 
 private:
     QStringList prepareDataForExport();

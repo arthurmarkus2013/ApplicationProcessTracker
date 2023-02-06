@@ -80,11 +80,11 @@ void MainWindow::on_btnExport_clicked()
                                                      tr("Portable Document Format (*.pdf);;All Files (*.*)"));
 
     if(!file_path.isEmpty())
-        logic.exportAsPDF(file_path);
+        logic.exportAsPDF(file_path, this);
 }
 
 
-void MainWindow::on_searchTerm_textChanged(const QString &arg1)
+void MainWindow::on_searchTerm_textChanged(const QString&)
 {
    auto matches = ui->applicationsTable->findItems(ui->searchTerm->text(), Qt::MatchFlag::MatchContains);
     int count = ui->applicationsTable->rowCount();
@@ -103,10 +103,10 @@ void MainWindow::on_searchTerm_textChanged(const QString &arg1)
 
 void MainWindow::on_applicationsTable_customContextMenuRequested(const QPoint &pos)
 {
-    QMenu *contextMenu = new QMenu(this);
+    QMenu ctxMenu(this);
 
-    auto *edit = contextMenu->addAction(tr("Edit"));
-    connect(edit, &QAction::triggered, this, [&](bool){
+    auto edit = std::make_unique<QAction>(ctxMenu.addAction(tr("Edit")));
+    connect(edit.get(), &QAction::triggered, this, [&](bool){
         auto items = ui->applicationsTable->selectedItems();
 
         Entry entry;
@@ -126,8 +126,8 @@ void MainWindow::on_applicationsTable_customContextMenuRequested(const QPoint &p
             }
     });
 
-    auto *del = contextMenu->addAction(tr("Delete"));
-    connect(del, &QAction::triggered, this, [&](bool){
+    auto del = std::make_unique<QAction>(ctxMenu.addAction(tr("Delete")));
+    connect(del.get(), &QAction::triggered, this, [&](bool){
         if(QMessageBox::question(this, tr("Delete Row"), tr("Do you really wanna delete this row?")) == QMessageBox::StandardButton::Yes)
         {
             auto items = ui->applicationsTable->selectedItems();
@@ -146,6 +146,6 @@ void MainWindow::on_applicationsTable_customContextMenuRequested(const QPoint &p
         }
     });
 
-    contextMenu->popup(ui->applicationsTable->viewport()->mapToGlobal(pos));
+    ctxMenu.exec(ui->applicationsTable->viewport()->mapToGlobal(pos));
 }
 

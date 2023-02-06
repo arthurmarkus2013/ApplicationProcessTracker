@@ -7,6 +7,7 @@
 #include <QDateEdit>
 #include <QMenu>
 #include <QMessageBox>
+#include <QShortcut>
 
 #include "businesslogic.h"
 
@@ -27,7 +28,7 @@ private slots:
 
     void on_btnExport_clicked();
 
-    void on_searchTerm_textChanged(const QString &arg1);
+    void on_searchTerm_textChanged(const QString&);
 
     void on_applicationsTable_customContextMenuRequested(const QPoint &pos);
 

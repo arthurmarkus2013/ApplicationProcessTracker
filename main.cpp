@@ -9,6 +9,8 @@
 #include <QSqlQuery>
 #include <QDir>
 
+#include <QMessageBox>
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -26,7 +28,8 @@ int main(int argc, char *argv[])
 
         if(!db.open())
         {
-            qDebug() << db.lastError().text();
+            QMessageBox::critical(nullptr, "Fatal Error", "Failed to open the database file");
+            a.exit(1);
         }
 
         db.exec("CREATE TABLE IF NOT EXISTS Applications "

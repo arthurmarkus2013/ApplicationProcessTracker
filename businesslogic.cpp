@@ -101,7 +101,8 @@ bool BusinessLogic::removeItem(Entry item)
 
 void pdf_error_handler (HPDF_STATUS error_no, HPDF_STATUS detail_no, void *user_data)
 {
-    qDebug() << "ERROR: error_no=" << (unsigned int) error_no << "detail_no=" << (int) detail_no;
+    auto msg = "ERROR: error_no = " + QString::number((unsigned int) error_no) + " detail_no = " + QString::number((int) detail_no);
+    QMessageBox::critical(static_cast<QWidget*>(user_data), "Failed To Export PDF", msg);
     throw std::exception(); /* throw exception on error */
 }
 
@@ -126,9 +127,9 @@ QStringList BusinessLogic::prepareDataForExport()
     return retVal;
 }
 
-bool BusinessLogic::exportAsPDF(QString path)
+bool BusinessLogic::exportAsPDF(QString path, QWidget *parent)
 {
-    HPDF_Doc pdf = HPDF_New(pdf_error_handler, nullptr);
+    HPDF_Doc pdf = HPDF_New(pdf_error_handler, parent);
 
     if (!pdf) {
         printf ("ERROR: cannot create pdf object.\n");
