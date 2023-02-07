@@ -11,6 +11,7 @@
 #include <QDate>
 #include <QMessageBox>
 #include <QStandardPaths>
+#include <QRegularExpression>
 
 #include "EntryHelper.h"
 

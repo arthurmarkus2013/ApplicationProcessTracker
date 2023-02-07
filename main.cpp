@@ -41,9 +41,9 @@ int main(int argc, char *argv[])
                 "latest_status INTEGER NOT NULL, "
                 "updated_on INTEGER NOT NULL)");
 
-#define _LOCALE_TEST
+//#define _LOCALE_TEST
 
-#ifdef _LOCALE_TEST
+#ifndef _LOCALE_TEST
     const QStringList uiLanguages = QLocale::system().uiLanguages();
     for (const QString &locale : uiLanguages) {
         const QString baseName = "ApplicationProcessTracker_" + QLocale(locale).name();
@@ -53,8 +53,9 @@ int main(int argc, char *argv[])
         }
     }
 #else
-    QLocale::setDefault(QLocale("ru_RU"));
-    if (translator.load(":/i18n/ApplicationProcessTracker_" + QLocale("ru_RU").name())) {
+    auto locale = "ru_RU";
+    QLocale::setDefault(QLocale(locale));
+    if (translator.load(":/i18n/ApplicationProcessTracker_" + QLocale(locale).name())) {
         a.installTranslator(&translator);
     }
 #endif

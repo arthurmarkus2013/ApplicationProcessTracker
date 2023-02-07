@@ -111,17 +111,18 @@ QStringList BusinessLogic::prepareDataForExport()
     QStringList retVal;
 
     auto items = getItems();
+    QRegularExpression re("[ ]+");
 
     for(auto &item : items)
     {
-        auto entry = item.company_name + " : " + tr("Applied On") + " " + QLocale().toString(item.applied_on);
+        auto entry = item.company_name + " : " + tr("Applied on") + " " + QLocale().toString(item.applied_on);
 
         if(item.status != EntryHelper::LatestStatus::Applied)
         {
-            entry += " - " + EntryHelper().convertLatestStatusToString(item.status) + " " + tr("On") + " " + QLocale().toString(item.updated_on);
+            entry += " - " + EntryHelper().convertLatestStatusToString(item.status) + " " + tr("on") + " " + QLocale().toString(item.updated_on);
         }
 
-        retVal.append(entry);
+        retVal.append(entry.replace(re, " "));
     }
 
     return retVal;
@@ -136,8 +137,9 @@ bool BusinessLogic::exportAsPDF(QString path, QWidget *parent)
         return false;
     }
 
-    int font_size = 12;
+    int font_size = 8;
     int page_margin = 30;
+    float line_spacing = 1.3f;
 
     try
     {
@@ -164,12 +166,12 @@ bool BusinessLogic::exportAsPDF(QString path, QWidget *parent)
         HPDF_Page page = HPDF_AddPage(pdf);
         HPDF_Page_SetFontAndSize(page, font, font_size);
         HPDF_Page_BeginText(page);
-        HPDF_Page_SetTextLeading(page, font_size);
+        HPDF_Page_SetTextLeading(page, font_size * line_spacing);
         int num_lines = 0;
 
         for(auto &item : items)
         {
-            int pos = font_size * num_lines;
+            float pos = font_size * num_lines * line_spacing;
 
             if((HPDF_Page_GetHeight(page) - pos) < page_margin)
             {
@@ -177,14 +179,14 @@ bool BusinessLogic::exportAsPDF(QString path, QWidget *parent)
                 page = HPDF_AddPage(pdf);
                 HPDF_Page_SetFontAndSize(page, font, font_size);
                 HPDF_Page_BeginText(page);
-                HPDF_Page_SetTextLeading(page, font_size);
+                HPDF_Page_SetTextLeading(page, font_size * line_spacing);
             }
 
-            HPDF_Page_TextRect(page, page_margin, HPDF_Page_GetHeight(page) - (page_margin + pos),
+            HPDF_Page_TextRect(page, page_margin, HPDF_Page_GetHeight(page) - (page_margin + pos + font_size),
                                HPDF_Page_GetWidth(page) - page_margin, page_margin,
                                item.toUtf8(), HPDF_TALIGN_LEFT, nullptr);
 
-            num_lines += std::ceil(HPDF_Page_TextWidth(page, item.toUtf8()) / (HPDF_Page_GetWidth(page) - page_margin));
+            num_lines += std::ceil(HPDF_Page_TextWidth(page, item.toUtf8()) / (HPDF_Page_GetWidth(page) - (page_margin * 2)));
         }
 
         HPDF_Page_EndText(page);

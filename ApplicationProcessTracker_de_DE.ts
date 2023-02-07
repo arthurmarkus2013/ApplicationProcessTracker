@@ -38,12 +38,12 @@
     </message>
     <message>
         <location filename="businesslogic.cpp" line="118"/>
-        <source>Applied On</source>
+        <source>Applied on</source>
         <translation>Beworben am</translation>
     </message>
     <message>
         <location filename="businesslogic.cpp" line="122"/>
-        <source>On</source>
+        <source>on</source>
         <translation>am</translation>
     </message>
     <message>

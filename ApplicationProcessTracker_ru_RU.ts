@@ -38,13 +38,13 @@
     </message>
     <message>
         <location filename="businesslogic.cpp" line="118"/>
-        <source>Applied On</source>
+        <source>Applied on</source>
         <translation>Подал заявление</translation>
     </message>
     <message>
         <location filename="businesslogic.cpp" line="122"/>
-        <source>On</source>
-        <translation></translation>
+        <source>on</source>
+        <translation> </translation>
     </message>
     <message>
         <location filename="businesslogic.cpp" line="136"/>
