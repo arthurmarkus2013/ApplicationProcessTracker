@@ -30,7 +30,7 @@ void MainWindow::populateTable()
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         ui->applicationsTable->setItem(i, 0, item);
 
-        item = new QTableWidgetItem(items[i].applied_on.toString());
+        item = new QTableWidgetItem(QLocale().toString(items[i].applied_on));
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         ui->applicationsTable->setItem(i, 1, item);
 
@@ -38,7 +38,7 @@ void MainWindow::populateTable()
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         ui->applicationsTable->setItem(i, 2, item);
 
-        item = new QTableWidgetItem(items[i].updated_on.toString());
+        item = new QTableWidgetItem(QLocale().toString(items[i].updated_on));
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         ui->applicationsTable->setItem(i, 3, item);
     }

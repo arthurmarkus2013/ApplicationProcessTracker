@@ -103,8 +103,7 @@ void pdf_error_handler(HPDF_STATUS error_no, HPDF_STATUS detail_no, void *user_d
 {
     auto msg = BusinessLogic::tr("ERROR") + ": error_no = " + QString::number((unsigned int) error_no)
             + " detail_no = " + QString::number((int) detail_no);
-    QMessageBox::critical(static_cast<QWidget*>(user_data), BusinessLogic::tr("Failed To Export PDF"), msg);
-    throw std::exception(); /* throw exception on error */
+    throw std::exception(msg.toUtf8()); /* throw exception on error */
 }
 
 QStringList BusinessLogic::prepareDataForExport()
@@ -115,11 +114,11 @@ QStringList BusinessLogic::prepareDataForExport()
 
     for(auto &item : items)
     {
-        auto entry = item.company_name + " : " + tr("Applied On") + " " + item.applied_on.toString();
+        auto entry = item.company_name + " : " + tr("Applied On") + " " + QLocale().toString(item.applied_on);
 
         if(item.status != EntryHelper::LatestStatus::Applied)
         {
-            entry += " - " + EntryHelper().convertLatestStatusToString(item.status) + " " + tr("On") + " " + item.updated_on.toString();
+            entry += " - " + EntryHelper().convertLatestStatusToString(item.status) + " " + tr("On") + " " + QLocale().toString(item.updated_on);
         }
 
         retVal.append(entry);
@@ -130,7 +129,7 @@ QStringList BusinessLogic::prepareDataForExport()
 
 bool BusinessLogic::exportAsPDF(QString path, QWidget *parent)
 {
-    HPDF_Doc pdf = HPDF_New(pdf_error_handler, parent);
+    HPDF_Doc pdf = HPDF_New(pdf_error_handler, nullptr);
 
     if (!pdf) {
         QMessageBox::critical(parent, tr("Fatal Error"), tr("ERROR: Can't create PDF object"));
@@ -138,14 +137,14 @@ bool BusinessLogic::exportAsPDF(QString path, QWidget *parent)
     }
 
     int font_size = 12;
-    int text_spacing = 20;
     int page_margin = 30;
 
     try
     {
+        HPDF_UseUTFEncodings(pdf);
         HPDF_SetCompressionMode(pdf, HPDF_COMP_ALL);
         HPDF_SetPageMode(pdf, HPDF_PAGE_MODE_USE_NONE);
-        HPDF_SetCurrentEncoder(pdf, "StandardEncoding");
+        HPDF_SetCurrentEncoder(pdf, "UTF-8");
         HPDF_SetInfoAttr(pdf, HPDF_INFO_TITLE, tr("My Applications").toUtf8());
 
         HPDF_Date info {0};
@@ -159,35 +158,43 @@ bool BusinessLogic::exportAsPDF(QString path, QWidget *parent)
         info.ind = 'Z';
         HPDF_SetInfoDateAttr(pdf, HPDF_INFO_CREATION_DATE, info);
 
-        HPDF_Font font = HPDF_GetFont(pdf, "Helvetica", NULL);
+        HPDF_Font font = HPDF_GetFont(pdf, HPDF_LoadTTFontFromFile(
+                                          pdf, QStandardPaths::locate(QStandardPaths::FontsLocation, "Arial.ttf").toUtf8(), true), "UTF-8");
         auto items = prepareDataForExport();
         HPDF_Page page = HPDF_AddPage(pdf);
         HPDF_Page_SetFontAndSize(page, font, font_size);
         HPDF_Page_BeginText(page);
+        HPDF_Page_SetTextLeading(page, font_size);
+        int num_lines = 0;
 
-        HPDF_Page_MoveTextPos(page, page_margin, HPDF_Page_GetHeight(page) - page_margin);
         for(auto &item : items)
         {
-            HPDF_Page_MoveTextPos(page, 0, -text_spacing);
-            HPDF_Page_ShowText(page, item.toUtf8());
+            int pos = font_size * num_lines;
 
-            int pos = HPDF_Page_GetCurrentTextPos(page).x;
-            if(pos < page_margin)
+            if((HPDF_Page_GetHeight(page) - pos) < page_margin)
             {
                 HPDF_Page_EndText(page);
                 page = HPDF_AddPage(pdf);
                 HPDF_Page_SetFontAndSize(page, font, font_size);
                 HPDF_Page_BeginText(page);
-                HPDF_Page_MoveTextPos(page, page_margin, HPDF_Page_GetHeight(page) - page_margin);
+                HPDF_Page_SetTextLeading(page, font_size);
             }
+
+            HPDF_Page_TextRect(page, page_margin, HPDF_Page_GetHeight(page) - (page_margin + pos),
+                               HPDF_Page_GetWidth(page) - page_margin, page_margin,
+                               item.toUtf8(), HPDF_TALIGN_LEFT, nullptr);
+
+            num_lines += std::ceil(HPDF_Page_TextWidth(page, item.toUtf8()) / (HPDF_Page_GetWidth(page) - page_margin));
         }
 
         HPDF_Page_EndText(page);
 
         HPDF_SaveToFile(pdf, path.toUtf8());
     }
-    catch(...)
+    catch(std::exception ex)
     {
+        QMessageBox::critical(parent, BusinessLogic::tr("Failed To Export PDF"), ex.what());
+
         HPDF_Free(pdf);
         return false;
     }

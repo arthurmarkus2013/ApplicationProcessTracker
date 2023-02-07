@@ -10,6 +10,7 @@
 #include <QStringList>
 #include <QDate>
 #include <QMessageBox>
+#include <QStandardPaths>
 
 #include "EntryHelper.h"
 
