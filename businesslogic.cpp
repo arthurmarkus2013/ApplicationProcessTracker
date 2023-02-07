@@ -148,8 +148,7 @@ bool BusinessLogic::exportAsPDF(QString path, QWidget *parent)
         HPDF_SetCurrentEncoder(pdf, "StandardEncoding");
         HPDF_SetInfoAttr(pdf, HPDF_INFO_TITLE, tr("My Applications").toUtf8());
 
-        HPDF_Date info;
-        memset(&info, 0, sizeof(info));
+        HPDF_Date info {0};
         auto now = QDateTime::currentDateTime();
         info.seconds = now.time().second();
         info.minutes = now.time().minute();
