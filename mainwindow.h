@@ -7,7 +7,7 @@
 #include <QDateEdit>
 #include <QMenu>
 #include <QMessageBox>
-#include <QShortcut>
+#include <QKeyEvent>
 
 #include "businesslogic.h"
 
@@ -18,6 +18,9 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *ev) override;
 
 public:
     MainWindow(QWidget *parent = nullptr);

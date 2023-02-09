@@ -44,6 +44,24 @@ void MainWindow::populateTable()
     }
 }
 
+bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
+{
+    if(ev->type() == QEvent::KeyPress)
+    {
+        auto event = static_cast<QKeyEvent*>(ev);
+        if(event->keyCombination() == QKeyCombination(Qt::KeyboardModifier::AltModifier, Qt::Key::Key_S))
+        {
+            ui->searchTerm->setFocus();
+
+            return true;
+        }
+        else
+            return false;
+    }
+    else
+        return QMainWindow::eventFilter(obj, ev);
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -51,6 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     ui->searchTerm->setPlaceholderText(tr("Search..."));
+    this->installEventFilter(this);
 
     resetTable();
     populateTable();
